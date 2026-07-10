@@ -9,6 +9,7 @@ import UploadSong from './pages/UploadSong.jsx';
 import MyUploads from './pages/MyUploads.jsx';
 import MyLiked from './pages/MyLiked.jsx';
 import SongDetails from './pages/SongDetails.jsx';
+import VerifyEmail from './pages/VerifyEmail.jsx';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route
               path="/upload"
               element={<PrivateRoute><UploadSong /></PrivateRoute>}

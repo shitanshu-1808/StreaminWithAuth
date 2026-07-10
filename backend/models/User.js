@@ -34,6 +34,28 @@ const userSchema = new mongoose.Schema(
       maxlength: [160, 'Bio cannot exceed 160 characters'],
       default: 'Music lover and TuneRank contributor.',
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+      select: false,
+    },
+    verificationTokenExpires: {
+      type: Date,
+      default: null,
+    },
+    otp: {
+      type: String,
+      default: null,
+      select: false,
+    },
+    otpExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

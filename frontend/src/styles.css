@@ -8,7 +8,7 @@
   --accent: #d53f8c;
   --accent-soft: #fb7185;
   --accent-light: #f472b6;
-  --success: #f87171;
+  --success: #34d399;
   --danger: #ef4444;
 }
 
@@ -473,6 +473,16 @@ select {
   padding: 0.95rem 1rem;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.05);
+}
+
+.auth-message.success {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.auth-message.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .auth-footer {

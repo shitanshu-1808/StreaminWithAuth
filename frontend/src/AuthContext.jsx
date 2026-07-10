@@ -24,10 +24,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (details) => {
-
-
-
     const response = await api.post('/auth/register', details);
+    if (response.data.requiresVerification) {
+      return response.data;
+    }
+
     setUser(response.data);
     return response.data;
   };
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, authHeaders }}>
+    <AuthContext.Provider value={{ user, setUser, login, register, logout, authHeaders }}>
       {children}
     </AuthContext.Provider>
   );
