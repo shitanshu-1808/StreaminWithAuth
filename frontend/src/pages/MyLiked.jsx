@@ -119,8 +119,8 @@ const MyLiked = () => {
                 <tr>
                   <th>#</th>
                   <th>Title</th>
-                  <th>Artist</th>
-                  <th className="hide-on-mobile">Uploader</th>
+                  <th className="hide-on-mobile">Artist</th>
+                  <th className="mobile-text-center">Uploader</th>
                   <th className="hide-on-mobile text-center">Plays</th>
                   <th className="text-center">Score</th>
                   <th className="hide-on-mobile">Added</th>
@@ -140,8 +140,8 @@ const MyLiked = () => {
                         </div>
                       </div>
                     </td>
-                    <td>{song.artist}</td>
-                    <td className="hide-on-mobile">{song.uploadedBy?.username || 'Unknown'}</td>
+                    <td className="hide-on-mobile">{song.artist}</td>
+                    <td className="mobile-text-center">{song.uploadedBy?.username || 'Unknown'}</td>
                     <td className="hide-on-mobile text-center">{song.playCount ?? 0}</td>
                     <td className="text-center">{song.score ?? 0}</td>
                     <td className="hide-on-mobile">{new Date(song.createdAt).toLocaleDateString()}</td>

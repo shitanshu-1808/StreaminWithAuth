@@ -82,14 +82,29 @@ body::after {
 }
 
 @keyframes bgPulse {
-  0% { opacity: 0.7; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.05); }
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 @keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-80px, 60px) scale(1.15); }
-  100% { transform: translate(40px, -30px) scale(0.95); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-80px, 60px) scale(1.15);
+  }
+
+  100% {
+    transform: translate(40px, -30px) scale(0.95);
+  }
 }
 
 /* ─── Scrollbar ─── */
@@ -118,7 +133,9 @@ select {
   font: inherit;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: 'Outfit', 'Inter', system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
@@ -146,8 +163,15 @@ a {
 }
 
 @keyframes navSlide {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .brand {
@@ -165,8 +189,15 @@ a {
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .links,
@@ -237,8 +268,15 @@ a {
 }
 
 @keyframes pageEnter {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ─── Dashboard Header ─── */
@@ -313,15 +351,15 @@ a {
   position: relative;
   overflow: hidden;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s ease,
-              opacity 0.2s ease;
+    box-shadow 0.3s ease,
+    opacity 0.2s ease;
 }
 
 .button::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -383,19 +421,37 @@ a {
   position: relative;
   overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s ease,
-              border-color 0.3s ease;
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
   animation: cardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.metric-card:nth-child(1) { animation-delay: 0.05s; }
-.metric-card:nth-child(2) { animation-delay: 0.1s; }
-.metric-card:nth-child(3) { animation-delay: 0.15s; }
-.metric-card:nth-child(4) { animation-delay: 0.2s; }
+.metric-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.metric-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.metric-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.metric-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
 
 @keyframes cardEnter {
-  from { opacity: 0; transform: translateY(20px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .metric-card::before {
@@ -486,8 +542,13 @@ a {
 }
 
 @keyframes shimmer {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.5;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ─── Tracks Table ─── */
@@ -829,8 +890,15 @@ a {
 }
 
 @keyframes authEnter {
-  from { opacity: 0; transform: translateY(30px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .auth-head {
@@ -900,8 +968,15 @@ a {
 }
 
 @keyframes messageSlide {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .auth-message.success {
@@ -979,6 +1054,7 @@ a {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -986,8 +1062,13 @@ a {
 }
 
 @keyframes pulse {
-  from { opacity: 0.7; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.7;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ─── Utility ─── */
@@ -1046,10 +1127,10 @@ a {
 
   .tracks-table {
     min-width: 100%;
-    font-size: 0.65rem;
+    font-size: 0.55rem;
   }
 
-  .tracks-table th, 
+  .tracks-table th,
   .tracks-table td {
     padding: 0.4rem 0.2rem;
   }
@@ -1068,11 +1149,11 @@ a {
   }
 
   .track-name {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
   }
 
   .track-subtitle {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
   }
 
   .vote-cell .button {
@@ -1081,12 +1162,17 @@ a {
     min-height: 32px;
   }
 
-  .dashboard-shell, .app-shell {
+  .dashboard-shell,
+  .app-shell {
     padding: 0 0.5rem 3rem;
   }
 
   .hide-on-mobile {
     display: none !important;
+  }
+
+  .mobile-text-center {
+    text-align: center !important;
   }
 
   .song-page iframe,
