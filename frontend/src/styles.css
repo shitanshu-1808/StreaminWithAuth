@@ -518,6 +518,11 @@ a {
   vertical-align: middle;
 }
 
+.tracks-table th.text-center,
+.tracks-table td.text-center {
+  text-align: center;
+}
+
 .tracks-table tbody tr {
   transition: background 0.25s ease, box-shadow 0.25s ease;
   border-radius: var(--radius-sm);
@@ -1035,8 +1040,53 @@ a {
   }
 
   .table-panel {
-    padding: 1.5rem;
+    padding: 1rem 0.5rem;
     border-radius: var(--radius-lg);
+  }
+
+  .tracks-table {
+    min-width: 100%;
+    font-size: 0.65rem;
+  }
+
+  .tracks-table th, 
+  .tracks-table td {
+    padding: 0.4rem 0.2rem;
+  }
+
+  .tracks-table tbody tr:first-child td {
+    padding-top: 1rem;
+  }
+
+  .track-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .track-title-cell {
+    gap: 0.35rem;
+  }
+
+  .track-name {
+    font-size: 0.7rem;
+  }
+
+  .track-subtitle {
+    font-size: 0.6rem;
+  }
+
+  .vote-cell .button {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.65rem;
+    min-height: 32px;
+  }
+
+  .dashboard-shell, .app-shell {
+    padding: 0 0.5rem 3rem;
+  }
+
+  .hide-on-mobile {
+    display: none !important;
   }
 
   .song-page iframe,
@@ -1069,12 +1119,14 @@ a {
   }
 
   .vote-cell {
-    flex-direction: column;
-    gap: 0.4rem;
+    flex-direction: row;
+    gap: 0.2rem;
   }
 
   .vote-cell .button {
-    width: 100%;
-    justify-content: center;
+    width: auto;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.6rem;
+    min-height: 28px;
   }
 }
