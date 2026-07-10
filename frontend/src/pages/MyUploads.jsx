@@ -52,7 +52,8 @@ const MyUploads = () => {
                   <th>#</th>
                   <th>Title</th>
                   <th>Artist</th>
-                  <th className="hide-on-mobile">Plays</th>
+                  <th className="hide-on-mobile">Uploader</th>
+                  <th className="hide-on-mobile text-center">Plays</th>
                   <th className="text-center">Score</th>
                   <th className="hide-on-mobile">Added</th>
                 </tr>
@@ -71,7 +72,8 @@ const MyUploads = () => {
                       </div>
                     </td>
                     <td>{song.artist}</td>
-                    <td className="hide-on-mobile">{song.playCount ?? 0}</td>
+                    <td className="hide-on-mobile">{song.uploadedBy?.username || 'Unknown'}</td>
+                    <td className="hide-on-mobile text-center">{song.playCount ?? 0}</td>
                     <td className="text-center">{song.score ?? 0}</td>
                     <td className="hide-on-mobile">{new Date(song.createdAt).toLocaleDateString()}</td>
                   </tr>

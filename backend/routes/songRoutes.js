@@ -23,7 +23,9 @@ router.get('/', async (req, res) => {
 
 router.get('/my/uploads', protect, async (req, res) => {
   try {
-    const songs = await Song.find({ uploadedBy: req.user.id }).sort({ createdAt: -1 });
+    const songs = await Song.find({ uploadedBy: req.user.id })
+      .sort({ createdAt: -1 })
+      .populate('uploadedBy', 'username');
     res.json(songs);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -32,7 +34,9 @@ router.get('/my/uploads', protect, async (req, res) => {
 
 router.get('/my/liked', protect, async (req, res) => {
   try {
-    const songs = await Song.find({ upvotes: req.user.id }).sort({ createdAt: -1 });
+    const songs = await Song.find({ upvotes: req.user.id })
+      .sort({ createdAt: -1 })
+      .populate('uploadedBy', 'username');
     res.json(songs);
   } catch (error) {
     res.status(500).json({ error: error.message });

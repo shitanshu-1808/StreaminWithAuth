@@ -153,7 +153,8 @@ const Home = () => {
                   <th>Title</th>
                   <th>Artist</th>
                   <th className="hide-on-mobile">Added</th>
-                  <th className="hide-on-mobile">Plays</th>
+                  <th className="hide-on-mobile">Uploader</th>
+                  <th className="hide-on-mobile text-center">Plays</th>
                   <th className="text-center">Score</th>
                   <th>Action</th>
                 </tr>
@@ -173,7 +174,8 @@ const Home = () => {
                     </td>
                     <td>{song.artist}</td>
                     <td className="hide-on-mobile">{new Date(song.createdAt).toLocaleDateString()}</td>
-                    <td className="hide-on-mobile">{song.playCount ?? 0}</td>
+                    <td className="hide-on-mobile">{song.uploadedBy?.username || 'Unknown'}</td>
+                    <td className="hide-on-mobile text-center">{song.playCount ?? 0}</td>
                     <td className="text-center">{song.score ?? 0}</td>
                     <td className="vote-cell">
                       <button
