@@ -11,6 +11,7 @@ const Home = () => {
   const [selectedSong, setSelectedSong] = useState(null);
   const [playerLoading, setPlayerLoading] = useState(false);
   const [playerError, setPlayerError] = useState('');
+  const [votingSongs, setVotingSongs] = useState({});
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -52,6 +53,9 @@ const Home = () => {
   };
 
   const voteSong = async (song, type) => {
+    if (votingSongs[song._id]) return;
+    
+    setVotingSongs(prev => ({ ...prev, [song._id]: true }));
     try {
       const response = await api.put(`/songs/${song._id}/${type}`, {}, { headers: authHeaders() });
       const updatedSong = {
@@ -65,7 +69,9 @@ const Home = () => {
         setSelectedSong(updatedSong);
       }
     } catch (err) {
-      setPlayerError('Unable to update vote.');
+      console.error('Unable to update vote.', err);
+    } finally {
+      setVotingSongs(prev => ({ ...prev, [song._id]: false }));
     }
   };
 
@@ -145,63 +151,45 @@ const Home = () => {
         ) : songs.length === 0 ? (
           <p className="table-loading">No uploads yet.</p>
         ) : (
-          <div className="table-wrap">
-            <table className="tracks-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th className="hide-on-mobile">Artist</th>
-                  <th className="hide-on-mobile">Added</th>
-                  <th className="mobile-text-center">Uploader</th>
-                  <th className="hide-on-mobile text-center">Plays</th>
-                  <th className="text-center">Score</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {songs.map((song, index) => (
-                  <tr key={song._id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div className="track-title-cell">
-                        <div className="track-avatar" />
-                        <div>
-                          <span className="track-name">{song.title}</span>
-                          <span className="track-subtitle">{song.artist}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="hide-on-mobile">{song.artist}</td>
-                    <td className="hide-on-mobile">{new Date(song.createdAt).toLocaleDateString()}</td>
-                    <td className="mobile-text-center">{song.uploadedBy?.username || 'Unknown'}</td>
-                    <td className="hide-on-mobile text-center">{song.playCount ?? 0}</td>
-                    <td className="text-center">{song.score ?? 0}</td>
-                    <td className="vote-cell">
-                      <button
-                        className="button secondary"
-                        onClick={() => voteSong(song, 'upvote')}
-                      >
-                        👍
-                      </button>
-                      <button
-                        className="button secondary"
-                        onClick={() => voteSong(song, 'downvote')}
-                      >
-                        👎
-                      </button>
-                      <button
-                        className="button primary"
-                        onClick={() => handlePlaySong(song)}
-                        disabled={playerLoading && selectedSong?._id === song._id}
-                      >
-                        {playerLoading && selectedSong?._id === song._id ? 'Loading...' : 'Play'}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="tracks-list">
+            {songs.map((song, index) => (
+              <div className="track-card" key={song._id}>
+                <div className="track-card-left">
+                  <div className="track-avatar-wrapper">
+                    <div className="track-number">{index + 1}</div>
+                    <div className="track-avatar" />
+                  </div>
+                  <div className="track-info">
+                    <span className="track-name">{song.title}</span>
+                    <span className="track-artist">{song.artist}</span>
+                    <span className="track-uploader">{song.uploadedBy?.username || 'Unknown'}</span>
+                  </div>
+                </div>
+                <div className="track-actions">
+                  <button
+                    className="icon-btn"
+                    onClick={() => voteSong(song, 'upvote')}
+                    disabled={votingSongs[song._id]}
+                  >
+                    👍 {Intl.NumberFormat('en', { notation: 'compact' }).format(song.score ?? 0)}
+                  </button>
+                  <button
+                    className="icon-btn"
+                    onClick={() => voteSong(song, 'downvote')}
+                    disabled={votingSongs[song._id]}
+                  >
+                    👎
+                  </button>
+                  <button
+                    className="play-btn"
+                    onClick={() => handlePlaySong(song)}
+                    disabled={playerLoading && selectedSong?._id === song._id}
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

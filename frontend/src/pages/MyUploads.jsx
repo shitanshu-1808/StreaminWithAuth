@@ -45,41 +45,24 @@ const MyUploads = () => {
         ) : songs.length === 0 ? (
           <p className="table-loading">You haven't uploaded any songs yet.</p>
         ) : (
-          <div className="table-wrap">
-            <table className="tracks-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th className="hide-on-mobile">Artist</th>
-                  <th className="mobile-text-center">Uploader</th>
-                  <th className="hide-on-mobile text-center">Plays</th>
-                  <th className="text-center">Score</th>
-                  <th className="hide-on-mobile">Added</th>
-                </tr>
-              </thead>
-              <tbody>
-                {songs.map((song, index) => (
-                  <tr key={song._id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div className="track-title-cell">
-                        <div className="track-avatar" />
-                        <div>
-                          <span className="track-name">{song.title}</span>
-                          <span className="track-subtitle">{song.artist}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="hide-on-mobile">{song.artist}</td>
-                    <td className="mobile-text-center">{song.uploadedBy?.username || 'Unknown'}</td>
-                    <td className="hide-on-mobile text-center">{song.playCount ?? 0}</td>
-                    <td className="text-center">{song.score ?? 0}</td>
-                    <td className="hide-on-mobile">{new Date(song.createdAt).toLocaleDateString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="tracks-list">
+            {songs.map((song, index) => (
+              <div className="track-card" key={song._id}>
+                <div className="track-card-left">
+                  <div className="track-avatar-wrapper">
+                    <div className="track-number">{index + 1}</div>
+                    <div className="track-avatar" />
+                  </div>
+                  <div className="track-info">
+                    <span className="track-name">{song.title}</span>
+                    <span className="track-artist">{song.artist}</span>
+                    <span className="track-uploader">
+                      Plays: {song.playCount ?? 0} • Score: {song.score ?? 0} • Added: {new Date(song.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
