@@ -9,6 +9,7 @@ const MyLiked = () => {
   const [playerLoading, setPlayerLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [votingSongs, setVotingSongs] = useState({});
 
   useEffect(() => {
     const fetchLikedSongs = async () => {
@@ -43,6 +44,9 @@ const MyLiked = () => {
   };
 
   const voteSong = async (song, type) => {
+    if (votingSongs[song._id]) return;
+
+    setVotingSongs((prev) => ({ ...prev, [song._id]: true }));
     try {
       const response = await api.put(`/songs/${song._id}/${type}`, {}, { headers: authHeaders() });
       const updatedSong = {
@@ -60,6 +64,8 @@ const MyLiked = () => {
       }
     } catch (err) {
       setError('Unable to update song vote.');
+    } finally {
+      setVotingSongs((prev) => ({ ...prev, [song._id]: false }));
     }
   };
 
@@ -75,6 +81,32 @@ const MyLiked = () => {
         </div>
       </div>
 
+      {selectedSong && (
+        <div className="table-panel">
+          <div className="table-panel-header">
+            <div>
+              <p className="eyebrow">Now Playing</p>
+              <h2>{selectedSong.title}</h2>
+              <p className="table-meta">
+                {selectedSong.artist} • Plays: {selectedSong.playCount ?? 0}
+              </p>
+              <p className="table-meta">
+                Uploaded by: {selectedSong.uploadedBy?.username || 'Unknown'}
+              </p>
+            </div>
+          </div>
+          <div className="player-video">
+            <iframe
+              src={`https://www.youtube.com/embed/${selectedSong.youtubeVideoId}?autoplay=1&rel=0`}
+              title={selectedSong.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          {error && <p className="error">{error}</p>}
+        </div>
+      )}
+
       <div className="table-panel">
         <div className="table-panel-header">
           <div>
@@ -84,86 +116,52 @@ const MyLiked = () => {
           <span className="table-meta">{songs.length} tracks</span>
         </div>
 
-        {selectedSong && (
-          <div className="table-panel mb-4">
-            <div className="table-panel-header">
-              <div>
-                <p className="eyebrow">Now Playing</p>
-                <h2>{selectedSong.title}</h2>
-                <p className="table-meta">
-                  {selectedSong.artist} • Plays: {selectedSong.playCount ?? 0}
-                </p>
-              </div>
-            </div>
-            <div className="player-video">
-              <iframe
-                src={`https://www.youtube.com/embed/${selectedSong.youtubeVideoId}?autoplay=1&rel=0`}
-                title={selectedSong.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        )}
-
         {loading ? (
           <p className="table-loading">Loading liked songs...</p>
-        ) : error ? (
+        ) : error && songs.length === 0 ? (
           <p className="error">{error}</p>
         ) : songs.length === 0 ? (
           <p className="table-loading">You haven't liked any songs yet.</p>
         ) : (
-          <div className="table-wrap">
-            <table className="tracks-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th className="hide-on-mobile">Artist</th>
-                  <th className="mobile-text-center">Uploader</th>
-                  <th className="hide-on-mobile text-center">Plays</th>
-                  <th className="text-center">Score</th>
-                  <th className="hide-on-mobile">Added</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {songs.map((song, index) => (
-                  <tr key={song._id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div className="track-title-cell">
-                        <div className="track-avatar" />
-                        <div>
-                          <span className="track-name">{song.title}</span>
-                          <span className="track-subtitle">{song.artist}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="hide-on-mobile">{song.artist}</td>
-                    <td className="mobile-text-center">{song.uploadedBy?.username || 'Unknown'}</td>
-                    <td className="hide-on-mobile text-center">{song.playCount ?? 0}</td>
-                    <td className="text-center">{song.score ?? 0}</td>
-                    <td className="hide-on-mobile">{new Date(song.createdAt).toLocaleDateString()}</td>
-                    <td className="vote-cell">
-                      <button
-                        className="button secondary"
-                        onClick={() => voteSong(song, 'downvote')}
-                      >
-                        Dislike
-                      </button>
-                      <button
-                        className="button primary"
-                        onClick={() => handlePlaySong(song)}
-                        disabled={playerLoading && selectedSong?._id === song._id}
-                      >
-                        {playerLoading && selectedSong?._id === song._id ? 'Loading...' : 'Play'}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="tracks-list">
+            {songs.map((song, index) => (
+              <div className="track-card" key={song._id}>
+                <div className="track-card-left">
+                  <div className="track-avatar-wrapper">
+                    <div className="track-number">{index + 1}</div>
+                    <div className="track-avatar" />
+                  </div>
+                  <div className="track-info">
+                    <span className="track-name">{song.title}</span>
+                    <span className="track-artist">{song.artist}</span>
+                    <span className="track-uploader">{song.uploadedBy?.username || 'Unknown'}</span>
+                  </div>
+                </div>
+                <div className="track-actions">
+                  <button
+                    className="icon-btn"
+                    onClick={() => voteSong(song, 'upvote')}
+                    disabled={votingSongs[song._id]}
+                  >
+                    👍 {Intl.NumberFormat('en', { notation: 'compact' }).format(song.score ?? 0)}
+                  </button>
+                  <button
+                    className="icon-btn"
+                    onClick={() => voteSong(song, 'downvote')}
+                    disabled={votingSongs[song._id]}
+                  >
+                    👎
+                  </button>
+                  <button
+                    className="play-btn"
+                    onClick={() => handlePlaySong(song)}
+                    disabled={playerLoading && selectedSong?._id === song._id}
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
