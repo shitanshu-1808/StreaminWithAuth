@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import 'dotenv/config'; // Automatically loads environment variables
+import 'dotenv/config'; 
 
 import authRoutes from './routes/authRoutes.js';
 import songRoutes from './routes/songRoutes.js';
