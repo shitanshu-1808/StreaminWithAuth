@@ -252,9 +252,28 @@ a {
   left: 20%;
 }
 
+/* .navbar children: brand | links | navbar-right */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Legacy — kept for safety but no longer used */
 .navbar-header {
   display: flex;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.navbar-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .mobile-menu-btn {
@@ -1195,21 +1214,29 @@ a {
 
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column;
+    /* Switch to a wrap layout so brand+navbar-right stay on row 1
+       and .links drops to row 2 when open */
+    flex-wrap: wrap;
     padding: 1rem 1.25rem;
     gap: 0;
-  }
-  
-  .navbar-header {
-    width: 100%;
-    justify-content: space-between;
+    align-items: center;
   }
 
-  .mobile-menu-btn {
-    display: flex;
+  /* Brand: stays on the left of row 1 */
+  .brand {
+    order: 1;
+    flex: 1;           /* push navbar-right to far right */
   }
 
+  /* navbar-right: stays on the right of row 1 */
+  .navbar-right {
+    order: 2;
+    margin-left: 0;    /* flex: 1 on brand handles the push */
+  }
+
+  /* Links: drops to row 2, full width */
   .links {
+    order: 3;
     display: none;
     width: 100%;
     flex-direction: column;
@@ -1223,7 +1250,15 @@ a {
   .links.show {
     display: flex;
   }
-  
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* Remove desktop-only modifier classes — just one icon now */
+  .nav-profile-desktop { display: flex; }
+  .nav-profile-mobile  { display: none; }
+
   .links a, .link-button {
     width: 100%;
     justify-content: flex-start;
@@ -1372,3 +1407,235 @@ a {
     font-size: 0.7rem;
   }
 }
+
+/* ─── Navbar Profile Icon ─── */
+.nav-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  box-shadow: 0 0 14px var(--accent-glow), 0 4px 12px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
+  position: relative;
+  margin-left: 0.5rem;
+}
+
+/* Desktop: show the after-links icon, hide the in-header icon */
+.nav-profile-desktop { display: flex; }
+.nav-profile-mobile  { display: none; }
+
+.nav-profile-btn::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, var(--accent), var(--purple)) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.nav-profile-btn:hover {
+  transform: scale(1.12) translateY(-1px);
+  box-shadow: 0 0 24px var(--accent-glow), 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.nav-profile-btn:hover::after {
+  opacity: 1;
+}
+
+.nav-profile-initials {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: #fff;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Profile Page ─── */
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 3rem 1rem 4rem;
+  position: relative;
+}
+
+.profile-bg-orb {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224, 69, 146, 0.07) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.profile-card {
+  width: min(560px, 100%);
+  background: var(--surface-glass);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2.5rem 2.5rem;
+  box-shadow: var(--shadow-card), 0 0 80px rgba(224, 69, 146, 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  animation: authEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--purple), var(--accent-soft));
+  background-size: 200% 100%;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+/* Avatar */
+.profile-avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 2rem;
+}
+
+.profile-avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  box-shadow: 0 0 32px var(--accent-glow), 0 8px 24px rgba(0, 0, 0, 0.35);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 2rem;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.profile-avatar-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, var(--accent), var(--purple)) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: spinRing 6s linear infinite;
+}
+
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Info block */
+.profile-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-name {
+  margin: 0.3rem 0 1.75rem;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text), var(--accent-soft));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.profile-fields {
+  display: grid;
+  gap: 1rem;
+  text-align: left;
+}
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.profile-field:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--border-accent);
+}
+
+.profile-field-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224, 69, 146, 0.12);
+  border-radius: 10px;
+}
+
+.profile-field-label {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.profile-field-value {
+  margin: 0;
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: var(--text);
+  word-break: break-all;
+}
+
+/* Actions */
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.profile-actions .button {
+  min-width: 140px;
+}

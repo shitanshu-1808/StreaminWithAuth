@@ -10,6 +10,7 @@ import MyUploads from './pages/MyUploads.jsx';
 import MyLiked from './pages/MyLiked.jsx';
 import SongDetails from './pages/SongDetails.jsx';
 import VerifyEmail from './pages/VerifyEmail.jsx';
+import Profile from './pages/Profile.jsx';
 
 function App() {
   return (
@@ -35,6 +36,10 @@ function App() {
               element={<PrivateRoute><MyLiked /></PrivateRoute>}
             />
             <Route path="/songs/:id" element={<SongDetails />} />
+            <Route
+              path="/profile"
+              element={<PrivateRoute><Profile /></PrivateRoute>}
+            />
           </Routes>
         </main>
       </BrowserRouter>
